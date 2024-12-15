@@ -1,6 +1,6 @@
 from cerebrum import config
 from cerebrum.client import Cerebrum
-from cerebrum.llm.layer import LLMLayer
+from cerebrum.llm.layer import LLMLayer, LLMItem
 from cerebrum.memory.layer import MemoryLayer
 from cerebrum.overrides.layer import OverridesLayer
 from cerebrum.storage.layer import StorageLayer
@@ -20,11 +20,12 @@ def setup_client(
     aios_kernel_url: str = "localhost:8000"
 ) -> Cerebrum:
     """Initialize and configure the Cerebrum client with specified parameters."""
+    
     client = Cerebrum(base_url=aios_kernel_url)
     config.global_client = client
 
     try:
-        client.add_llm_layer(LLMLayer(llm_name=llm_name, llm_backend=llm_backend)) \
+        client.add_llm_layer(LLMLayer(llms=[LLMItem(llm_name=llm_name, llm_backend=llm_backend), LLMItem(llm_name='gpt-4o-mini', llm_backend='openai')])) \
               .add_storage_layer(StorageLayer(root_dir=root_dir)) \
               .add_memory_layer(MemoryLayer(memory_limit=memory_limit)) \
               .add_tool_layer(ToolLayer()) \
@@ -124,7 +125,6 @@ def main():
     )
     parser.add_argument(
         "--aios_kernel_url",
-        default = "http://35.232.56.61:8000",
         required=True
     )
 
