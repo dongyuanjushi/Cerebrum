@@ -39,8 +39,8 @@ class Cerebrum:
     def add_llm_layer(self, config: LLMLayer) -> 'Cerebrum':
         """Set up the LLM core component."""
         result = self._post("/core/llm/setup", asdict(config))
-        self._components_initialized.add("llm")
-        self.results['llm'] = result
+        self._components_initialized.add("llms")
+        self.results['llms'] = result
         return self
 
     def add_storage_layer(self, config: StorageLayer) -> 'Cerebrum':
@@ -70,7 +70,7 @@ class Cerebrum:
 
     def setup_agent_factory(self, config: OverridesLayer) -> 'Cerebrum':
         """Set up the agent factory for managing agent execution."""
-        required_components = {"llm", "memory", "storage", "tool"}
+        required_components = {"llms", "memory", "storage", "tool"}
         missing_components = required_components - self._components_initialized
 
         if missing_components:
@@ -120,7 +120,7 @@ class Cerebrum:
 
     def override_scheduler(self, config: OverridesLayer) -> 'Cerebrum':
         """Set up the FIFO scheduler with all components."""
-        required_components = {"llm", "memory", "storage", "tool"}
+        required_components = {"llms", "memory", "storage", "tool"}
         missing_components = required_components - self._components_initialized
 
         if missing_components:
