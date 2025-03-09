@@ -1,3 +1,4 @@
 requests
 platformdirs
 pydantic
+git+ssh://git@github.com/princeton-nlp/SWE-bench.git
