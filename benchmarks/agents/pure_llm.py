@@ -20,7 +20,6 @@ class PureLLM:
                 messages=messages,
                 temperature=0.0,
             )
-        breakpoint()
         result = response["response"]["response_message"]
         return result
     
@@ -34,6 +33,21 @@ class PureLLM:
     </FINAL ANSWER>"""
         messages = [
             {"content": system_prompt, "role": "system"},
+            {"content": input_str, "role": "user"}
+        ]
+        if self.on_aios:
+            response = llm_chat(self.agent_name, messages)
+        else:
+            response = completion(
+                model="gpt-4o-mini",
+                messages=messages,
+                temperature=0.0,
+            )
+        result = response["response"]["response_message"]
+        return result
+    
+    def run_gaia(self, input_str: str):
+        messages = [
             {"content": input_str, "role": "user"}
         ]
         if self.on_aios:

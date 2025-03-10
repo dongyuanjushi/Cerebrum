@@ -8,6 +8,7 @@ from .agents.pure_llm import PureLLM
 AGENT_TYPE_MAPPING_AIOS = {
     "swe:llm": PureLLM,
     "humaneval:llm": PureLLM,
+    "gaia:llm": PureLLM,
 }
 
 

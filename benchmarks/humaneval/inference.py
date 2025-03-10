@@ -7,6 +7,9 @@ from ..utils import get_parser
 
 
 def parse_result(result: str):
+    match = re.search(r'<FINAL ANSWER>\s*([\s\S]*?)\s*</FINAL ANSWER>', result)
+    if match:
+        result = match.group(1)
     match = re.search(r'```python\s*([\s\S]*?)```', result)
     if match:
         result = match.group(1)
