@@ -2,6 +2,7 @@ from cerebrum.llm.apis import llm_chat, llm_call_tool
 from cerebrum.interface import AutoTool
 import os
 import json
+from cerebrum.utils.communication import aios_kernel_url
 
 class CocktailMixlogist:
     def __init__(self, agent_name):
@@ -160,7 +161,7 @@ class CocktailMixlogist:
                     response = llm_chat(
                         agent_name=self.agent_name,
                         messages=self.messages,
-                        base_url="http://localhost:8000"
+                        base_url=aios_kernel_url
                     )["response"]
                     
                     self.messages.append({"role": "assistant", "content": response["response_message"]})

@@ -5,6 +5,8 @@ import traceback
 import logging
 import datetime
 import os
+from cerebrum.utils.communication import aios_kernel_url
+
 class MathAgent:
     def __init__(self, agent_name):
         self.agent_name = agent_name
@@ -170,13 +172,13 @@ class MathAgent:
                         agent_name=self.agent_name,
                         messages=self.messages,
                         tools=selected_tools,
-                        base_url="http://localhost:8000"
+                        base_url=aios_kernel_url
                     )["response"]
                 else:
                     response = llm_chat(
                         agent_name=self.agent_name,
                         messages=self.messages,
-                        base_url="http://localhost:8000"
+                        base_url=aios_kernel_url
                     )["response"]
                 
                 self.messages.append({"role": "assistant", "content": response["response_message"]})

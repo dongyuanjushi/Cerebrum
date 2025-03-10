@@ -1,6 +1,8 @@
 from cerebrum.llm.apis import LLMQuery, LLMResponse, llm_chat, llm_call_tool
 import json
 
+from cerebrum.utils.communication import aios_kernel_url
+
 class TestAgent:
     def __init__(self, agent_name):
         self.agent_name = agent_name
@@ -12,7 +14,7 @@ class TestAgent:
         tool_response = llm_chat(
             agent_name=self.agent_name,
             messages=self.messages,
-            base_url="http://localhost:8000"
+            base_url=aios_kernel_url
         )
         
         final_result = tool_response["response"]["response_message"]
