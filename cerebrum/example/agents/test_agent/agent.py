@@ -1,7 +1,9 @@
 from cerebrum.llm.apis import LLMQuery, LLMResponse, llm_chat, llm_call_tool
 import json
 
-from cerebrum.utils.communication import aios_kernel_url
+from cerebrum.config.config_manager import config
+
+aios_kernel_url = config.get_kernel_url()
 
 class TestAgent:
     def __init__(self, agent_name):

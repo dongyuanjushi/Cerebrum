@@ -5,7 +5,9 @@ import traceback
 import logging
 import datetime
 import os
-from cerebrum.utils.communication import aios_kernel_url
+from cerebrum.config.config_manager import config
+
+aios_kernel_url = config.get_kernel_url()
 
 class MathAgent:
     def __init__(self, agent_name):

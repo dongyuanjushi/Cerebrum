@@ -2,7 +2,9 @@ from cerebrum.llm.apis import llm_chat, llm_call_tool
 from cerebrum.interface import AutoTool
 import os
 import json
-from cerebrum.utils.communication import aios_kernel_url
+from cerebrum.config.config_manager import config
+
+aios_kernel_url = config.get_kernel_url()
 
 class CocktailMixlogist:
     def __init__(self, agent_name):
