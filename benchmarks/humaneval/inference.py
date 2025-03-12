@@ -8,32 +8,12 @@ from ..utils import get_parser
 
 
 def parse_result(result: str):
-    # breakpoint()
-    # Extract only the content between FINAL_ANSWER tags
-    # Return the result directly since we don't need additional parsing
     start_idx = result.find("<FINAL_ANSWER>")
     end_idx = result.find("</FINAL_ANSWER>")
     if start_idx != -1 and end_idx != -1:
         result = result[start_idx + len("<FINAL_ANSWER>"):end_idx]
     else:
         result = ""
-    # match = re.search(r'<FINAL_ANSWER>\s*([\s\S]*?)\s*</FINAL_ANSWER>', result)
-    # if match:
-    #     result = match.group(1)
-    # match = re.search(r'```python\s*([\s\S]*?)```', result)
-    # if match:
-    #     result = match.group(1)
-
-    # if not result.startswith("def") or not result.startswith("import"):
-    #     result += "    "
-
-    # code_lines = result.split("\n")
-    # for line in code_lines[:]:
-    #     if line.startswith("def"):
-    #         code_lines.remove(line)
-    #     elif line.startswith("import"):
-    #         line += "    "
-    # result = "\n".join(code_lines)
 
     return result
 
