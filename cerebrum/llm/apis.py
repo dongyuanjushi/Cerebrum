@@ -145,7 +145,9 @@ class LLMQuery(Query):
     llms: Optional[List[Dict[str, Any]]] = Field(default=None)
     messages: List[Dict[str, Union[str, Any]]]
     tools: Optional[List[Dict[str, Any]]] = Field(default_factory=list)
-    action_type: Literal["chat", "tool_use", "operate_file"] = Field(default="chat")
+    action_type: Literal["chat", "chat_with_json_output", "chat_with_tool_call_output", "tool_use", "operate_file"] = Field(default="chat")
+    temperature: float = Field(default=1.0)
+    max_new_tokens: int = Field(default=1000)
     message_return_type: Literal["text", "json"] = Field(default="text")
     response_format: Optional[Dict[str, Any]] = Field(default=None)
 
