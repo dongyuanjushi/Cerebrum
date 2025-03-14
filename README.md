@@ -222,14 +222,10 @@ You can also list tools available in your local environment using the following 
 list-local-tools
 ```
 
-This command will search for tools in predefined local directories. 
-```
-
 To load a local tool in your code:
 
 ```python
 from cerebrum.tool import AutoTool
-
 # Load a tool from local folders
 tool = AutoTool.from_preloaded("local/my_custom_tool", local=True)
 ```
