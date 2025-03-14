@@ -131,6 +131,19 @@ python cerebrum/run_agent.py \
     --agenthub_url https://app.aios.foundation
 ```
 
+
+### Useful commands to use
+#### Agents
+- [List agents from agenthub](./cerebrum/commands/list_agenthub_agents.py)
+- [Download agents](./cerebrum/commands/download_agent.py)
+- [Upload agent](./cerebrum/commands/upload_agent.py)
+
+#### Tools
+- [List tools from toolhub](./cerebrum/commands/list_toolhub_tools.py)
+- [List tools from local](./cerebrum/commands/list_local_tools.py)
+- [Upload tool](./cerebrum/commands/upload_tool.py)
+
+
 ## 🚀 Develop and customize new agents
 
 This guide will walk you through creating and publishing your own agents for AIOS. 
@@ -209,8 +222,6 @@ To load a tool from ToolHub in your code:
 
 ```python
 from cerebrum.interface import AutoTool
-
-# Load a tool from ToolHub
 tool = AutoTool.from_preloaded("example/arxiv", local=False)
 ```
 
@@ -226,7 +237,6 @@ To load a local tool in your code:
 
 ```python
 from cerebrum.tool import AutoTool
-# Load a tool from local folders
 tool = AutoTool.from_preloaded("local/my_custom_tool", local=True)
 ```
 
