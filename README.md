@@ -62,8 +62,14 @@ The AIOS-Agent SDK is designed for agent users and developers, enabling them to 
    source cerebrum-env/bin/activate
    ```
 
-6. **Install the package**
+6. **Install the package**  
+   Using uv (Recommended)
    ```bash
+   pip install uv
+   uv pip install -e .
+   ```
+   or using pip
+   ```
    pip install -e .
    ```
 
@@ -180,23 +186,7 @@ Your agent needs a config.json file that describes its functionality. Here's wha
 ```
 
 ### Available tools
-
-When setting up your agent, you'll need to specify which tools it will use. Below is a list of all currently available tools and how to reference them in your configuration:
-
-| Author | Name | How to call them |
-|:--|:--|:--|
-| example | arxiv | example/arxiv |
-| example | bing_search | example/bing_search |
-| example | currency_converter | example/currency_converter |
-| example | wolfram_alpha | example/wolfram_alpha |
-| example | google_search | example/google_search |
-| openai | speech_to_text | openai/speech_to_text |
-| example | web_browser | example/web_browser |
-| timbrooks | image_to_image | timbrooks/image_to_image |
-| example | downloader | example/downloader |
-| example | doc_question_answering | example/doc_question_answering |
-| stability-ai | text_to_image | stability-ai/text_to_image |
-| example | text_to_speech | example/text_to_speech |
+Use the following command to list available tools in the agenthub: 
 
 To use these tools in your agent, simply include their reference (from the "How to Use" column) in your agent's configuration file. For example, if you want your agent to be able to search academic papers and convert currencies, you would include both `example/arxiv` and `example/currency_converter` in your configuration.
 
