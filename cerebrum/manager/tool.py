@@ -296,14 +296,68 @@ class ToolManager:
         response = requests.get(f"{self.base_url}/cerebrum/tools/list")
         response.raise_for_status()
         tools = response.json()
-        return [
-            {
-                "tool": f"{tool['author']}/{tool['name']}/{tool['version']}",
-                "type": tool.get('tool_type', 'generic'),
-                "description": tool.get('description', '')
-            }
-            for tool in tools
-        ]
+        
+        # Dictionary to track the latest version of each tool
+        latest_tools = {}
+        
+        for tool in tools.values():
+            # breakpoint()
+            tool_key = f"{tool['author']}/{tool['name']}"
+            
+            # If we haven't seen this tool before, add it
+            if tool_key not in latest_tools:
+                latest_tools[tool_key] = {
+                    "name": tool["name"],
+                    "author": tool["author"],
+                    "version": tool["version"],
+                    "description": tool.get("description", "No description available")
+                }
+            else:
+                # If we've seen this tool, check if this version is newer
+                current_version = latest_tools[tool_key]["version"]
+                new_version = tool["version"]
+                
+                # Compare versions (assuming semantic versioning)
+                if self._is_newer_version(new_version, current_version):
+                    latest_tools[tool_key] = {
+                        "name": tool["name"],
+                        "author": tool["author"],
+                        "version": tool["version"],
+                        "description": tool.get("description", "No description available")
+                    }
+        
+        # Convert dictionary to list
+        tool_list = list(latest_tools.values())
+        return tool_list
+        
+    def _is_newer_version(self, version1: str, version2: str) -> bool:
+        """
+        Compare two version strings and return True if version1 is newer than version2.
+        Handles semantic versioning (e.g., 1.2.3 > 1.2.2).
+        """
+        try:
+            # Split versions by dots and convert to integers
+            v1_parts = [int(x) for x in version1.split('.')]
+            v2_parts = [int(x) for x in version2.split('.')]
+            
+            # Pad with zeros if needed
+            while len(v1_parts) < len(v2_parts):
+                v1_parts.append(0)
+            while len(v2_parts) < len(v1_parts):
+                v2_parts.append(0)
+                
+            # Compare each part
+            for i in range(len(v1_parts)):
+                if v1_parts[i] > v2_parts[i]:
+                    return True
+                elif v1_parts[i] < v2_parts[i]:
+                    return False
+            
+            # If we get here, versions are equal
+            return False
+        except (ValueError, AttributeError):
+            # If versions can't be parsed, fall back to string comparison
+            return version1 > version2
 
     def check_tool_updates(self, author: str, name: str, current_version: str) -> bool:
         """Check if updates are available for a tool."""
