@@ -9,9 +9,12 @@ import requests
 from pathlib import Path
 import platformdirs
 import importlib.util
+import inspect
 
 from cerebrum.manager.package import ToolPackage
 from cerebrum.tool.core.registry import PATHS
+
+from cerebrum.utils.manager import get_newest_version, compare_versions
 
 class ToolManager:
     def __init__(self, base_url: str):
@@ -96,8 +99,7 @@ class ToolManager:
                 version: str | None = None,
                 local: bool = False):
         """Load a tool dynamically and return its class and configuration."""
-
-        print('local', local)
+        # print('local', local)
         
         if not local:
             if version is None:
@@ -107,7 +109,7 @@ class ToolManager:
             tool_path = self._get_cache_path(author, name, version)
             
             if not tool_path.exists():
-                print(f"Tool {author}/{name} (v{version}) not found in cache. Downloading...")
+                # print(f"Tool {author}/{name} (v{version}) not found in cache. Downloading...")
                 self.download_tool(author, name, version)
 
             tool_package = ToolPackage(tool_path)
@@ -156,6 +158,7 @@ class ToolManager:
                 tool_class = getattr(module, module_name)
                 
                 return tool_class, tool_package.get_config()
+            
             finally:
                 # Clean up
                 sys.path.pop(0)  # Remove temp_dir
@@ -166,11 +169,10 @@ class ToolManager:
                 if module_name in sys.modules:
                     del sys.modules[module_name]
         else:
+            # breakpoint()
             module = importlib.import_module(f"cerebrum.tool.core.{PATHS[name].get('module_name')}")
             tool = getattr(module, PATHS[name].get('class_name'))
-
             return tool, None
-
 
 
     def _get_cached_versions(self, author: str, name: str) -> List[str]:
@@ -179,13 +181,6 @@ class ToolManager:
         if tool_dir.exists():
             return [self._path_to_version(v.stem) for v in tool_dir.glob("*.tool") if v.is_file()]
         return []
-
-    def _get_newest_version(self, versions: List[str]) -> Optional[str]:
-        """Get the newest version from a list of versions."""
-        if not versions:
-            return None
-        # Simple version comparison (you might want to use packaging.version for more robust comparison)
-        return sorted(versions, key=lambda v: [int(x) for x in v.split('.')])[-1]
 
     def _get_cache_path(self, author: str, name: str, version: str) -> Path:
         """Get the cache path for a tool."""
@@ -291,7 +286,7 @@ class ToolManager:
         finally:
             temp_reqs_path.unlink(missing_ok=True)
 
-    def list_available_tools(self) -> List[Dict[str, str]]:
+    def list_toolhub_tools(self) -> List[Dict[str, str]]:
         """List all available tools from the remote server."""
         response = requests.get(f"{self.base_url}/cerebrum/tools/list")
         response.raise_for_status()
@@ -318,7 +313,7 @@ class ToolManager:
                 new_version = tool["version"]
                 
                 # Compare versions (assuming semantic versioning)
-                if self._is_newer_version(new_version, current_version):
+                if compare_versions(new_version, current_version) > 0:
                     latest_tools[tool_key] = {
                         "name": tool["name"],
                         "author": tool["author"],
@@ -330,34 +325,18 @@ class ToolManager:
         tool_list = list(latest_tools.values())
         return tool_list
         
-    def _is_newer_version(self, version1: str, version2: str) -> bool:
-        """
-        Compare two version strings and return True if version1 is newer than version2.
-        Handles semantic versioning (e.g., 1.2.3 > 1.2.2).
-        """
-        try:
-            # Split versions by dots and convert to integers
-            v1_parts = [int(x) for x in version1.split('.')]
-            v2_parts = [int(x) for x in version2.split('.')]
+    def list_local_tools(self) -> List[Dict[str, str]]:
+        local_tools = []
+        for name in PATHS.keys():
+            module = importlib.import_module(f"cerebrum.tool.core.{PATHS[name].get('module_name')}")
             
-            # Pad with zeros if needed
-            while len(v1_parts) < len(v2_parts):
-                v1_parts.append(0)
-            while len(v2_parts) < len(v1_parts):
-                v2_parts.append(0)
-                
-            # Compare each part
-            for i in range(len(v1_parts)):
-                if v1_parts[i] > v2_parts[i]:
-                    return True
-                elif v1_parts[i] < v2_parts[i]:
-                    return False
-            
-            # If we get here, versions are equal
-            return False
-        except (ValueError, AttributeError):
-            # If versions can't be parsed, fall back to string comparison
-            return version1 > version2
+            module_path = inspect.getfile(module)
+            absolute_path = os.path.abspath(module_path)
+            local_tools.append({
+                "name": name,
+                "path": absolute_path
+            })
+        return local_tools
 
     def check_tool_updates(self, author: str, name: str, current_version: str) -> bool:
         """Check if updates are available for a tool."""

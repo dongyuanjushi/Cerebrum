@@ -1,4 +1,4 @@
-from cerebrum.manager.agent import AgentManager
+from cerebrum.manager.tool import ToolManager
 from cerebrum.config.config_manager import config
 from rich.console import Console
 from rich.table import Table
@@ -6,20 +6,20 @@ from rich.panel import Panel
 from rich.text import Text
 from rich.box import ROUNDED
 
-def list_agents():
+def list_toolhub_tools():
     console = Console()
     
-    with console.status("[bold green]Fetching agents from AgentHub..."):
-        agent_manager = AgentManager(config.get_agent_hub_url())
-        agents = agent_manager.list_available_agents()
+    with console.status("[bold green]Fetching tools from ToolHub..."):
+        tool_manager = ToolManager(config.get_tool_hub_url())
+        tools = tool_manager.list_toolhub_tools()
     
-    if not agents:
-        console.print(Panel("[bold yellow]No agents found in AgentHub", title="Agent List"))
+    if not tools:
+        console.print(Panel("[bold yellow]No tools found in ToolHub", title="Tool List"))
         return
     
     # Create a table with row separators and rounded borders
     table = Table(
-        title="Available Agents in AgentHub",
+        title="Available Tools in ToolHub",
         box=ROUNDED,
         show_header=True,
         header_style="bold white on blue",
@@ -31,15 +31,16 @@ def list_agents():
     table.add_column("Description", style="green", width=40, overflow="fold")
     table.add_column("Author", style="blue", no_wrap=True)
     table.add_column("Latest Version", style="magenta", no_wrap=True)
+    table.add_column("How to Call", style="green", no_wrap=True)
     
     # Add rows to the table
-    for agent in agents:
-        name = agent.get("name", "Unknown")
-        description = agent.get("description", "No description available")
-        author = agent.get("author", "Unknown")
-        version = agent.get("version", "N/A")
-        
-        table.add_row(name, description, author, version)
+    for tool in tools:
+        name = tool.get("name", "Unknown")
+        description = tool.get("description", "No description available")
+        author = tool.get("author", "Unknown")
+        version = tool.get("version", "N/A")
+        id_to_call = f"{author}/{name}"
+        table.add_row(name, description, author, version, id_to_call)
     
     # Print the table
     console.print("\n")  # Add some space before the table
@@ -47,10 +48,10 @@ def list_agents():
     
     # Print summary
     summary = Text()
-    summary.append(f"\nTotal agents available: ", style="bold")
-    summary.append(f"{len(agents)}", style="bold green")
+    summary.append(f"\nTotal tools available: ", style="bold")
+    summary.append(f"{len(tools)}", style="bold green")
     console.print(summary)
     console.print("\n")  # Add some space after the summary
 
 if __name__ == "__main__":
-    list_agents()
+    list_toolhub_tools()
