@@ -96,7 +96,19 @@ Below are some useful commands to use
     list-local-agents
     ```
 - [Download agents](./cerebrum/commands/download_agent.py)
+    ```bash
+    download-agent \
+        --agent_author <agent_author> \
+        --agent_name <agent_name> \
+        --agent_version <agent_version> \
+        --agenthub_url <agenthub_url>
+    ```
 - [Upload agent](./cerebrum/commands/upload_agent.py)
+    ```bash
+    upload-agents \
+        --agent_path <agent_path> \
+        --agenthub_url <agenthub_url>
+    ```
 
 - [List tools from toolhub](./cerebrum/commands/list_toolhub_tools.py)
     ```bash
@@ -106,7 +118,20 @@ Below are some useful commands to use
     ```bash
     list-local-tools
     ```
+- [Download tool](./cerebrum/commands/download_tool.py)
+    ```bash
+    download-tool \
+        --tool_author <tool_author> \
+        --tool_name <tool_name> \
+        --tool_version <tool_version> \
+        --toolhub_url <toolhub_url>
+    ```
 - [Upload tool](./cerebrum/commands/upload_tool.py)
+    ```bash
+    upload-tool \
+        --tool_path <tool_path> \
+        --toolhub_url <toolhub_url>
+    ```
 
 ### 2. Run agents
 
@@ -162,17 +187,17 @@ This guide will walk you through creating and publishing your own agents for AIO
 First, let's look at how to organize your agent's files. Every agent needs three essential components:
 
 ```
-author/
+author_name/
 └── agent_name/
       │── entry.py        # Your agent's main logic
       │── config.json     # Configuration and metadata
       └── meta_requirements.txt  # Additional dependencies
 ```
 
-For example, if your name is 'example' and you're building a demo_agent that searches and summarizes articles, your folder structure would look like this:
+For example, if your name is 'demo_author' and you're building a demo_agent that searches and summarizes articles, your folder structure would look like this:
 
 ```
-example/
+demo_author/
    └── demo_agent/
          │── entry.py
          │── config.json
