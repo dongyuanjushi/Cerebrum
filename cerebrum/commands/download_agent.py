@@ -1,8 +1,9 @@
 from cerebrum.manager.agent import AgentManager
 
 import argparse
+import sys
 
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser(description="Upload agents")
     parser.add_argument(
         "--author",
@@ -23,4 +24,6 @@ if __name__ == "__main__":
 
     agent = manager.download_agent(args.author, args.name)
     print(agent)
-    
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -1,8 +1,9 @@
 from cerebrum.manager.tool import ToolManager
 
 import argparse
+import sys
 
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser(description="Upload tools")
     parser.add_argument(
         "--tool_path",
@@ -20,3 +21,6 @@ if __name__ == "__main__":
     tool_package = manager.package_tool(args.tool_path)
 
     manager.upload_tool(tool_package)
+
+if __name__ == "__main__":
+    sys.exit(main())
