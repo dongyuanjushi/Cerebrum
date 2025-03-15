@@ -235,6 +235,9 @@ class AgentManager:
         except Exception as e:
             logger.error(f"Error reading metadata from {config_path}: {str(e)}")
             raise
+    
+    def list_local_agents(self) -> List[Dict[str, str]]:
+        return NotImplementedError
 
     def list_agenthub_agents(self) -> List[Dict[str, str]]:
         response = requests.get(f"{self.base_url}/cerebrum/get_all_agents")
