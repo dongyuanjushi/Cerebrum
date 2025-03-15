@@ -27,7 +27,7 @@ The AIOS-Agent SDK is designed for agent users and developers, enabling them to 
    cd Cerebrum
    ```
 
-3. **Create Virtual Environment**
+2. **Create Virtual Environment**
    ```bash
    conda create -n cerebrum-env python=3.10
    ```
@@ -44,7 +44,7 @@ The AIOS-Agent SDK is designed for agent users and developers, enabling them to 
    python3 -m venv cerebrum-env
    ```
 
-4. **Activate the environment**
+3. **Activate the environment**
    ```bash
    conda activate myenv
    ```
@@ -62,7 +62,7 @@ The AIOS-Agent SDK is designed for agent users and developers, enabling them to 
    source cerebrum-env/bin/activate
    ```
 
-6. **Install the package**  
+4. **Install the package**  
    Using uv (Recommended)
    ```bash
    pip install uv
@@ -73,7 +73,7 @@ The AIOS-Agent SDK is designed for agent users and developers, enabling them to 
    pip install -e .
    ```
 
-7. **Verify installation**
+5. **Verify installation**
    ```bash
    python -c "import cerebrum; from cerebrum.client import Cerebrum; print(Cerebrum)"
    ```
@@ -83,8 +83,8 @@ The AIOS-Agent SDK is designed for agent users and developers, enabling them to 
 >
 > Please see our [documentation](https://docs.aios.foundation/) for more information.
 
-1. **Start the AIOS Kernel** 
-   📝 See [here](https://docs.aios.foundation/getting-started/installation).
+### 1. Start the AIOS Kernel
+📝 See [here](https://docs.aios.foundation/getting-started/installation).
 
 Below are some useful commands to use
 - [List agents from agenthub](./cerebrum/commands/list_agenthub_agents.py)
@@ -108,7 +108,7 @@ Below are some useful commands to use
     ```
 - [Upload tool](./cerebrum/commands/upload_tool.py)
 
-2. **Run agents**
+### 2. Run agents
 
 Either run agents that already exist in the local by passing the path to the agent directory
 
