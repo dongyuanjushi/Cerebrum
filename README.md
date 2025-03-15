@@ -86,12 +86,34 @@ The AIOS-Agent SDK is designed for agent users and developers, enabling them to 
 1. **Start the AIOS Kernel** 
    📝 See [here](https://docs.aios.foundation/getting-started/installation).
 
+Below are some useful commands to use
+- [List agents from agenthub](./cerebrum/commands/list_agenthub_agents.py)
+    ```bash
+    list-agenthub-agents
+    ```
+- [List agents from local](./cerebrum/commands/list_local_agents.py)
+    ```
+    list-local-agents
+    ```
+- [Download agents](./cerebrum/commands/download_agent.py)
+- [Upload agent](./cerebrum/commands/upload_agent.py)
+
+- [List tools from toolhub](./cerebrum/commands/list_toolhub_tools.py)
+    ```bash
+    list-toolhub-tools
+    ```
+- [List tools from local](./cerebrum/commands/list_local_tools.py)
+    ```bash
+    list-local-tools
+    ```
+- [Upload tool](./cerebrum/commands/upload_tool.py)
+
 2. **Run agents**
 
 Either run agents that already exist in the local by passing the path to the agent directory
 
 ```
-python cerebrum/run_agent.py \
+run-agent \
     --mode local \
     --agent_path <agent_name_or_path> \ # path to the agent directory
     --task <task_input> \
@@ -101,7 +123,7 @@ python cerebrum/run_agent.py \
 For example, to run the test_agent in the local directory, you can run:
 
 ```
-python cerebrum/run_agent.py \
+run-agent \
     --mode local \
     --agent_path cerebrum/example/agents/test_agent \
     --task "What is the capital of United States?"
@@ -110,7 +132,7 @@ python cerebrum/run_agent.py \
 Or run agents that are uploaded to agenthub by passing the author and agent name
 
 ```
-python cerebrum/run_agent.py \
+run-agent \
     --mode remote \
     --agent_author <author> \
     --agent_name <agent_name> \
@@ -122,7 +144,7 @@ python cerebrum/run_agent.py \
 For example, to run the test_agent in the agenthub, you can run:
 
 ```
-python cerebrum/run_agent.py \
+run-agent \
     --mode remote \
     --agent_author example \
     --agent_name test_agent \
@@ -130,18 +152,6 @@ python cerebrum/run_agent.py \
     --task "What is the capital of United States?" \
     --agenthub_url https://app.aios.foundation
 ```
-
-
-### Useful commands to use
-#### Agents
-- [List agents from agenthub](./cerebrum/commands/list_agenthub_agents.py)
-- [Download agents](./cerebrum/commands/download_agent.py)
-- [Upload agent](./cerebrum/commands/upload_agent.py)
-
-#### Tools
-- [List tools from toolhub](./cerebrum/commands/list_toolhub_tools.py)
-- [List tools from local](./cerebrum/commands/list_local_tools.py)
-- [Upload tool](./cerebrum/commands/upload_tool.py)
 
 
 ## 🚀 Develop and customize new agents
@@ -237,7 +247,7 @@ To load a local tool in your code:
 
 ```python
 from cerebrum.tool import AutoTool
-tool = AutoTool.from_preloaded("local/my_custom_tool", local=True)
+tool = AutoTool.from_preloaded("google/google_search", local=True)
 ```
 
 If you would like to create your new tools, refer to [How to develop new tools](#develop-and-publish-new-tools)
@@ -262,7 +272,8 @@ demo_author/
     └── config.json   # Tool configuration and metadata
 ```
 
-> [!IMPORTANT] To use the agents in your local device, you need to put the tool folder under the cerebrum/tool/core folder
+> [!IMPORTANT]
+> To use the agents in your local device, you need to put the tool folder under the cerebrum/tool/core folder and register your tool in the cerebrum/tool/core/registry.py
 
 ### Create Tool Class
 In `entry.py`, you'll need to implement a tool class which is identified in the config.json with two essential methods:
